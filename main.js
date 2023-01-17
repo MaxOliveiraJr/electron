@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron');
+const path = require('path')
+const os = require("os");
 
 const isDev = process.env.NODE_DEV !== undefined && process.env.NODE_DEV === "development" ? true : false;
 
@@ -8,8 +10,13 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 600,
         height: 600,
+        icon: path.join(__dirname, "assets", "icon", "progBR.png"),
         backgroundColor: "#123",
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration:true,
+            preload: path.join(__dirname, 'src','preload.js')
+        }
     });
     win.loadFile("./src/index.html");
     if (isDev) {
@@ -22,6 +29,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
+    console.log(os.cpus()[0].model)
 })
 
 app.on('window-all-closed', () => {
@@ -31,6 +39,7 @@ app.on('window-all-closed', () => {
     }
 })
 
+// Para Mac
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
