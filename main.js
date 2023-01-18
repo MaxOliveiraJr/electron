@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, globalShortcut } = require('electron');
 const path = require('path')
 const os = require("os");
 
@@ -28,6 +28,13 @@ function createWindow() {
 
             win.webContents.send('cpu_name', os.cpus()[0].model);
         }, 3000)
+
+        const menuTemplate = [
+            { role: 'appMenu' },
+            { role: 'fileMenu' },
+        ];
+        const menu = Menu.buildFromTemplate(menuTemplate);
+        Menu.setApplicationMenu(menu);
     })
 }
 
@@ -51,6 +58,6 @@ app.on('activate', () => {
 })
 
 
-ipcMain.on('open_new_window',()=>{
+ipcMain.on('open_new_window', () => {
     createWindow();
 })
