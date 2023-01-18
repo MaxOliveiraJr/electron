@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path')
 const os = require("os");
 
@@ -14,8 +14,8 @@ function createWindow() {
         backgroundColor: "#123",
         show: false,
         webPreferences: {
-            nodeIntegration:true,
-            preload: path.join(__dirname, 'src','preload.js')
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'src', 'preload.js')
         }
     });
     win.loadFile("./src/index.html");
@@ -24,6 +24,10 @@ function createWindow() {
     }
     win.once('ready-to-show', () => {
         win.show();
+        setTimeout(() => {
+
+            win.webContents.send('cpu_name', os.cpus()[0].model);
+        }, 3000)
     })
 }
 
@@ -44,4 +48,9 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+})
+
+
+ipcMain.on('open_new_window',()=>{
+    createWindow();
 })
