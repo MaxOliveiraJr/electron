@@ -44,7 +44,11 @@ function createWindow() {
                     },
                     {
                         label: 'Close all windows',
-                        click: () => { BrowserWindow.getAllWindows().forEach(window => window.close()) }
+                        accelerator: 'CmdOrCtrl+a',
+                        click: () => {
+                            console.log('ra')
+                            BrowserWindow.getAllWindows().forEach(window => window.close())
+                        }
 
                     }
                 ]
@@ -58,6 +62,15 @@ function createWindow() {
 app.whenReady().then(() => {
     createWindow();
     console.log(os.cpus()[0].model)
+    globalShortcut.register('CmdOrCtrl+d', () => {
+        console.log("Atalho Global")
+        BrowserWindow.getAllWindows()[0].setAlwaysOnTop(true)
+        BrowserWindow.getAllWindows()[0].setAlwaysOnTop(false)
+    })
+})
+
+app.on('will-quit',()=>{
+    globalShortcut.unregisterAll();
 })
 
 app.on('window-all-closed', () => {
