@@ -32,6 +32,23 @@ function createWindow() {
         const menuTemplate = [
             { role: 'appMenu' },
             { role: 'fileMenu' },
+            {
+                label: 'fileMenu', submenu: [
+                    {
+                        label: 'New Window', click: () => {
+                            createWindow();
+                        }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: 'Close all windows',
+                        click: () => { BrowserWindow.getAllWindows().forEach(window => window.close()) }
+
+                    }
+                ]
+            },
         ];
         const menu = Menu.buildFromTemplate(menuTemplate);
         Menu.setApplicationMenu(menu);
